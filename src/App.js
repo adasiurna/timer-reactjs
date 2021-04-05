@@ -2,7 +2,6 @@ import React from 'react';
 import Timer from './Timer'
 import './App.css';
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -13,6 +12,7 @@ class App extends React.Component {
       countSets: 10,
       countWork: 15,
       countRest: 5,
+      displayTimer: false,
       runningWork: false,
       runningRest: false,
       pause: false
@@ -32,7 +32,7 @@ class App extends React.Component {
     this.playLongBeep = this.playLongBeep.bind(this);
     this.playShortBeep = this.playShortBeep.bind(this);
   }
-  //const longBeep = new Audio("https://raw.githubusercontent.com/adasiurna/sounds/master/beep-01a.mp3");
+
   incSets() {
     if (this.state.sets < 99) {
       this.setState({ sets: this.state.sets + 1 })
@@ -43,7 +43,6 @@ class App extends React.Component {
       this.setState({ sets: this.state.sets - 1 })
     }
   }
-  //incWork = () => this.setState({work: this.state.work + 1});
   incWork() {
     if (this.state.work < 3599) {
       this.setState({ work: this.state.work + 1 })
@@ -54,7 +53,6 @@ class App extends React.Component {
       this.setState({ work: this.state.work - 1 })
     }
   }
-  //incRest = () => this.setState({rest: this.state.rest + 1});
   incRest() {
     if (this.state.rest < 3599) {
       this.setState({ rest: this.state.rest + 1 })
@@ -67,7 +65,7 @@ class App extends React.Component {
   }
 
   handleReset() {
-    this.setState({ sets: 10, work: 15, rest: 5, countSets: 10, countWork: 15, countRest: 5, runningWork: false, runningRest: false, pause: false });
+    this.setState({ sets: 10, work: 15, rest: 5, countSets: 10, countWork: 15, countRest: 5, runningWork: false, displayTimer: false, runningRest: false, pause: false });
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -75,8 +73,7 @@ class App extends React.Component {
 
   handleStartStop() {
     if (!this.state.runningWork && !this.state.runningRest && !this.state.pause) {
-      this.setState({ countSets: this.state.sets, countWork: this.state.work, countRest: this.state.rest, runningWork: true });
-      //this.playLongBeep();
+      this.setState({ countSets: this.state.sets, countWork: this.state.work, countRest: this.state.rest, displayTimer: true, runningWork: true });
     }
     else if ((this.state.runningWork || this.state.runningRest) && this.timer && !this.state.pause) {
       this.setState({ pause: true })
@@ -84,12 +81,10 @@ class App extends React.Component {
     }
     else if (this.state.runningWork && this.timer && this.state.pause) {
       this.setState({ pause: false })
-      //paleidziam work
       this.handleWorkCountdown();
     }
     else if (this.state.runningRest && this.timer && this.state.pause) {
       this.setState({ pause: false })
-      //paleidziam rest
       this.handleRestCountdown();
     }
   }
@@ -216,13 +211,14 @@ class App extends React.Component {
 
         <div id="start_stop" onClick={this.handleStartStop} class="button">Start / Stop</div>
         <div id="reset" onClick={this.handleReset} class="button">Reset</div>
-        <Timer
+        {this.state.displayTimer && <Timer
           sets={this.state.countSets}
           work={this.state.countWork}
           rest={this.state.countRest}
           runningWork={this.state.runningWork}
           runningRest={this.state.runningRest}
-        />
+        />}
+
       </div>
     );
   }
