@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import Settings from './Settings'
 import Timer from './Timer'
 import './App.css';
 
@@ -17,12 +18,6 @@ class App extends React.Component {
       runningRest: false,
       pause: false
     }
-    this.incSets = this.incSets.bind(this);
-    this.decSets = this.decSets.bind(this);
-    this.incWork = this.incWork.bind(this);
-    this.decWork = this.decWork.bind(this);
-    this.incRest = this.incRest.bind(this);
-    this.decRest = this.decRest.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleStartStop = this.handleStartStop.bind(this);
     this.handleWorkCountdown = this.handleWorkCountdown.bind(this);
@@ -33,36 +28,29 @@ class App extends React.Component {
     this.playShortBeep = this.playShortBeep.bind(this);
   }
 
-  incSets() {
-    if (this.state.sets < 99) {
-      this.setState({ sets: this.state.sets + 1 })
-    }
-  }
-  decSets() {
-    if (this.state.sets > 1) {
-      this.setState({ sets: this.state.sets - 1 })
-    }
-  }
-  incWork() {
-    if (this.state.work < 3599) {
-      this.setState({ work: this.state.work + 1 })
-    }
-  }
-  decWork() {
-    if (this.state.work > 5) {
-      this.setState({ work: this.state.work - 1 })
-    }
-  }
-  incRest() {
-    if (this.state.rest < 3599) {
-      this.setState({ rest: this.state.rest + 1 })
-    }
-  }
-  decRest() {
-    if (this.state.rest > 0) {
-      this.setState({ rest: this.state.rest - 1 })
-    }
-  }
+  incSets = () => this.state.sets < 99 ?
+    this.setState({ sets: this.state.sets + 1 }) :
+    this.setState({ sets: this.state.sets })
+
+  decSets = () => this.state.sets > 1 ?
+    this.setState({ sets: this.state.sets - 1 }) :
+    this.setState({ sets: this.state.sets })
+
+  incWork = () => this.state.work < 3599 ?
+    this.setState({ work: this.state.work + 1 }) :
+    this.setState({ work: this.state.work })
+
+  decWork = () => this.state.work > 5 ?
+    this.setState({ work: this.state.work - 1 }) :
+    this.setState({ work: this.state.work })
+
+  incRest = () => this.state.rest < 3599 ?
+    this.setState({ rest: this.state.rest + 1 }) :
+    this.setState({ rest: this.state.rest })
+
+  decRest = () => this.state.rest > 0 ?
+    this.setState({ rest: this.state.rest - 1 }) :
+    this.setState({ rest: this.state.rest })
 
   handleReset() {
     this.setState({ sets: 10, work: 15, rest: 5, countSets: 10, countWork: 15, countRest: 5, runningWork: false, displayTimer: false, runningRest: false, pause: false });
@@ -90,28 +78,22 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    //handle Work countdown
     if (this.state.runningWork !== prevState.runningWork && !this.state.runningRest) {
-      switch (this.state.runningWork) {
-        case true:
-          this.handleWorkCountdown();
+      if (this.state.runningWork) {
+        this.handleWorkCountdown();
       }
     }
     if (this.state.countWork === 0 && this.state.runningWork) {
       this.handleWorkStop();
     }
-
-    //handle Rest countdown
     if (this.state.runningRest !== prevState.runningRest && !this.state.runningWork) {
-      switch (this.state.runningRest) {
-        case true:
-          this.handleRestCountdown();
+      if (this.state.runningRest) {
+        this.handleRestCountdown();
       }
     }
     if (this.state.countRest === 0 && this.state.runningRest) {
       this.handleRestStop();
     }
-
   } //componentDidUpdate ENDS
 
   handleWorkCountdown() {
@@ -169,55 +151,31 @@ class App extends React.Component {
     audio.play();
   }
 
-  format(time) {
-    let seconds = time % 60;
-    let minutes = Math.floor(time / 60);
-    minutes = minutes.toString().length === 1 ? "0" + minutes : minutes;
-    seconds = seconds.toString().length === 1 ? "0" + seconds : seconds;
-    return minutes + ':' + seconds;
-  }
-
   render() {
-    const { work } = this.state;
-    const { rest } = this.state;
     return (
-      <div class="container">
-        <div id="settings">
-          <div class="set box">
-            <div id="set-label" class="label">Sets</div>
-            <div class="box-flex">
-              <div id="set-decrement" onClick={this.decSets} class="calc-sign">[-]</div>
-              <div id="set-length" class="length">{this.state.sets}</div>
-              <div id="set-increment" onClick={this.incSets} class="calc-sign">[+]</div>
-            </div>
-          </div>
-          <div class="session box">
-            <div id="session-label" class="label">Work</div>
-            <div class="box-flex">
-              <div id="session-decrement" onClick={this.decWork} class="calc-sign">[-]</div>
-              <div id="session-length" class="length">{this.format(work)}</div>
-              <div id="session-increment" onClick={this.incWork} class="calc-sign">[+]</div>
-            </div>
-          </div>
-          <div class="break box">
-            <div id="break-label" class="label">Rest</div>
-            <div class="box-flex">
-              <div id="break-decrement" onClick={this.decRest} class="calc-sign">[-]</div>
-              <div id="break-length" class="length">{this.format(rest)}</div>
-              <div id="break-increment" onClick={this.incRest} class="calc-sign">[+]</div>
-            </div>
-          </div>
-        </div>
+      <div className="container">
+        <Settings
+          sets={this.state.sets}
+          work={this.state.work}
+          rest={this.state.rest}
+          ONincSets={this.incSets}
+          ONdecSets={this.decSets}
+          ONincWork={this.incWork}
+          ONdecWork={this.decWork}
+          ONincRest={this.incRest}
+          ONdecRest={this.decRest} />
 
-        <div id="start_stop" onClick={this.handleStartStop} class="button">Start / Stop</div>
-        <div id="reset" onClick={this.handleReset} class="button">Reset</div>
-        {this.state.displayTimer && <Timer
-          sets={this.state.countSets}
-          work={this.state.countWork}
-          rest={this.state.countRest}
-          runningWork={this.state.runningWork}
-          runningRest={this.state.runningRest}
-        />}
+        {this.state.displayTimer &&
+          <Timer
+            sets={this.state.countSets}
+            work={this.state.countWork}
+            rest={this.state.countRest}
+            runningWork={this.state.runningWork}
+            runningRest={this.state.runningRest}
+          />}
+
+        <div id="start_stop" onClick={this.handleStartStop} className="button">Start / Stop</div>
+        <div id="reset" onClick={this.handleReset} className="button">Reset</div>
 
       </div>
     );
