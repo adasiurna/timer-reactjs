@@ -100,3 +100,15 @@ body {
     left: 2%;
   }
 }
+
+/*** wide screen ***/
+@media only screen and (min-width: 1400px) {
+  #settings,
+  .button,
+  #timer {
+    width: 40%;
+  }
+  #timer {
+    left: 30%;
+  }
+}

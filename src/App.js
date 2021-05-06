@@ -1,7 +1,7 @@
 import React from 'react'
 import Settings from './Settings'
 import Timer from './Timer'
-import './App.css';
+import './App.css'
 
 class App extends React.Component {
   constructor(props) {
@@ -150,6 +150,7 @@ class App extends React.Component {
     var audio = new Audio('https://raw.githubusercontent.com/adasiurna/sounds/master/beep-07.mp3');
     audio.play();
   }
+
 
   render() {
     return (
