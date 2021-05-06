@@ -65,9 +65,10 @@ body {
 #timer {
   position: absolute;
   top: 0;
+  bottom: 120px;
   left: 20%;
   width: 60%;
-  height: 69vh;
+  /* height: 69vh; */
   margin: 0 auto;
   border-radius: 10px 10px 0 0;
   display: flex;
